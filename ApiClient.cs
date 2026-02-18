@@ -89,17 +89,6 @@ public class ApiClient : IDisposable
         return await response.Content.ReadFromJsonAsync<ApiObject>(_jsonOptions);
     }
 
-    // ── PATCH (partial update) ─────────────────────────────────────────────────
-
-    /// <summary>Partially updates the object identified by <paramref name="id"/>.</summary>
-    public async Task<ApiObject?> PatchObjectAsync(string id, object partialRequest)
-    {
-        var content = JsonContent.Create(partialRequest, options: _jsonOptions);
-        var response = await _httpClient.PatchAsync($"/objects/{id}", content);
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<ApiObject>(_jsonOptions);
-    }
-
     // ── DELETE ─────────────────────────────────────────────────────────────────
 
     /// <summary>Deletes the object identified by <paramref name="id"/>.</summary>
