@@ -4,7 +4,7 @@
 This document contains only the commands required to run the test suite.
 
 Prerequisite
-- .NET SDK 10.0 installed and on PATH
+- .NET SDK 10.0 installed
 
 ## Using Visual Studio
 
