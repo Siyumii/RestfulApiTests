@@ -15,6 +15,8 @@ public class ApiClient : IDisposable
     private readonly JsonSerializerOptions _jsonOptions;
 
     private const string BaseUrl = "https://api.restful-api.dev";
+    // API key generated from the endpoint page
+    private const string ApiKey = "48c08bd0-fc00-464f-920c-f933d4e496f0";
 
     public ApiClient()
     {
@@ -25,6 +27,8 @@ public class ApiClient : IDisposable
         };
 
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        // attach API key for authenticated quota
+        _httpClient.DefaultRequestHeaders.Add("x-api-key", ApiKey);
 
         _jsonOptions = new JsonSerializerOptions
         {
@@ -35,11 +39,17 @@ public class ApiClient : IDisposable
 
     // ── GET all objects ────────────────────────────────────────────────────────
 
-    /// <summary>Returns every object in the store.</summary>
+    /// <summary>Returns every object.</summary>
     public async Task<List<ApiObject>?> GetAllObjectsAsync()
     {
         var response = await _httpClient.GetAsync("/objects");
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            var allow = response.Headers.Allow.Any() ? string.Join(", ", response.Headers.Allow) : "<none>";
+            throw new HttpRequestException($"GET /objects returned {(int)response.StatusCode} {response.StatusCode}. Allow: {allow}. Body: {body}");
+        }
+
         return await response.Content.ReadFromJsonAsync<List<ApiObject>>(_jsonOptions);
     }
 
