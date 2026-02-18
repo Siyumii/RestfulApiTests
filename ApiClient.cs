@@ -15,8 +15,6 @@ public class ApiClient : IDisposable
     private readonly JsonSerializerOptions _jsonOptions;
 
     private const string BaseUrl = "https://api.restful-api.dev";
-    // API key generated from the endpoint page
-    private const string ApiKey = "48c08bd0-fc00-464f-920c-f933d4e496f0";
 
     public ApiClient()
     {
@@ -27,8 +25,6 @@ public class ApiClient : IDisposable
         };
 
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-        // attach API key for authenticated quota
-        _httpClient.DefaultRequestHeaders.Add("x-api-key", ApiKey);
 
         _jsonOptions = new JsonSerializerOptions
         {
